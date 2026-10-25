@@ -7,15 +7,13 @@ class ESP32CalcNode(Node):
     def __init__(self):
         super().__init__('esp32_calc_node')
         
-        # الـ IP اللي ظهر قدامنا في الشاشة
-        self.esp_ip = '192.168.88.180'  
+
+        self.esp_ip = 'IP FROM SERIAL MONITER ARDUINO IDE '  
         self.esp_port = 8888
 
-        # إنشاء اتصال UDP
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.settimeout(3.0)
 
-        # استقبال الرقمين من التيرمينال أو إرسال 15 و 25 افتراضياً
         num1 = sys.argv[1] if len(sys.argv) > 2 else '20'
         num2 = sys.argv[2] if len(sys.argv) > 2 else '20'
 
@@ -26,10 +24,8 @@ class ESP32CalcNode(Node):
         self.get_logger().info(f"Sending numbers ({a}, {b}) to ESP32 over Wi-Fi...")
         
         try:
-            # إرسال الرقمين للـ ESP32
             self.sock.sendto(msg.encode('utf-8'), (self.esp_ip, self.esp_port))
             
-            # استقبال النتيجة من الـ ESP32
             data, _ = self.sock.recvfrom(1024)
             result = data.decode('utf-8')
             self.get_logger().info(f"Received Result from ESP32 = {result}")
